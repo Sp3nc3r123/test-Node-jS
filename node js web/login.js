@@ -1,0 +1,87 @@
+var mysql = require('mysql');
+var express = require('express');
+var session = require('express-session');
+var bodyParser = require('body-parser');
+var path = require('path');
+
+var connection = mysql.createConnection({
+	host     : 'localhost',
+	user     : 'root',
+	password : '123123ms',
+	database : 'nodelogin'
+});
+
+var app = express();
+app.use(session({
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
+}));
+app.use(bodyParser.urlencoded({extended : true}));
+app.use(bodyParser.json());
+
+app.get('/', function(request, response) {
+	response.sendFile(path.join(__dirname + "/login.html"));
+});
+
+app.post('/auth', function(request, response) {
+	var username = request.body.username;
+	var password = request.body.password;
+	if (username && password) {
+		connection.query('SELECT * FROM accounts WHERE User_name = ? AND User_Password = ?', [username, password], function(error, results, fields) {
+			if (results.length > 0) {
+				request.session.loggedin = true;
+				request.session.User_name  = username;
+				response.redirect('/home');
+			} else {
+				response.send('Incorrect Username and/or Password!');
+			}			
+			response.end();
+		});
+	} else {
+		response.send('Please enter Username and Password!');
+		response.end();
+	}
+});
+
+app.get('/home', function(request, response) {
+	if (request.session.loggedin) {
+		response.send('Welcome back, ' + request.session.User_name + '!');
+	} else {
+		response.send('Please login to view this page!');
+	}
+	response.end();
+});
+
+app.get('/newacct', function(request, response) {
+	response.sendFile(path.join(__dirname + "/register.html"));
+});
+
+app.post("/newuser", function(req, res) {
+    // get data from forms and add to the table called user..
+
+    var F1_name = req.body.F_name;
+    var L1_name = req.body.L_name;
+    var User1_name = req.body.U_name;
+    var User1_email = req.body.email;
+    var User1_Password = req.body.psw;
+    var Account1_Type = "user";
+    
+    var sql =
+    console.log(User1_name , User1_email, User1_Password);
+
+    connection.connect(function(err) {
+     if (err) throw err;
+     console.log("Connected!");
+     var post = {F_name:F1_name, L_name:L1_name, User_name:User1_name, User_Password:User1_Password, Account_Type:Account1_Type, User_email:User1_email};
+     connection.query("INSERT INTO accounts SET ?", post, function (err, result) {
+     if (err) {throw err;} else{
+	res.redirect('/');
+      }
+     console.log("1 record inserted");
+   });
+  });
+});
+
+
+app.listen(8080);

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Registration Page</title>
+		<style>
+		.login-form {
+			width: 300px;
+			margin: 0 auto;
+			font-family: Tahoma, Geneva, sans-serif;
+		}
+		.login-form h1 {
+			text-align: center;
+			color: #B2E4BE;
+			font-size: 24px;
+			padding: 20px 0 20px 0;
+		}
+		.login-form input[type="password"],
+		.login-form input[type="text"] {
+			width: 100%;
+			padding: 15px;
+			border: 1px solid #dddddd;
+			margin-bottom: 15px;
+			box-sizing:border-box;
+			border-radius: 8px;11:01 PM 3/6/2021
+		}
+		.login-form input[type="submit"] {
+			width: 100%;
+			padding: 15px;
+			background-color: #ffebcd;
+			border: 0;
+			box-sizing: border-box;
+			cursor: pointer;
+			font-weight: bold;
+			color: #4d4d4d;
+			border-radius: 8px;
+		}
+
+		body {
+  			background-image: url("images/b4.jpg");//no need /images.b4.jpg 
+  			background-color: #cccccc;
+ 			background-repeat: no-repeat;
+  			background-attachment: fixed;
+  			background-size: cover;
+
+		}
+		</style>
+		<script type="text/javascript">
+			var check = function() {
+  				if (document.getElementById('psw').value ==
+   			   	  document.getElementById('repsw').value) {
+    			   	  document.getElementById('message').style.color = 'green';
+    			   	  document.getElementById('message').innerHTML = 'matching';
+  				} else {
+    			   	  document.getElementById('message').style.color = 'red';
+    			   	  document.getElementById('message').innerHTML = 'not matching';
+  				}
+			}
+		</script>
+	</head>
+	<body>
+		<div class="login-form">
+			<h1>Registration Form</h1>
+			<form action="newuser" method="POST">
+				<input type="text" name="F_name" placeholder="First Name" required>
+				<input type="text" name="L_name" placeholder="Last Name" required>
+				<input type="text" name="U_name" placeholder="Username" required>
+				<input type="password" name="psw" id="psw" placeholder="Password" onkeyup='check();' required>
+				<input type="password" name="repsw" id="repsw" placeholder="Password" onkeyup='check();' required>
+				 <span id='message'>password</span>
+				<input type="text" name="email" placeholder="email" required>
+				<input type="submit">
+			</form>
+
+		</div>
+	</body>
+</html>
